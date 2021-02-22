@@ -17,14 +17,29 @@ if(isset($_GET["ident"]) && isset($_GET["comm"])){
     if($ident == $ident_safed){
         //Webserver hat sich identifiziert
         //Jetzt muss online nachgeschaut werden um welchen Kommand das es sich handelt
-        $sql = "[SQL_ZUR_COMMANDO_ABFRAGE]";
-        $mysqli = new_mysqli();
-        $res = sql_result_to_array(start_sql($mysqli,$sql));
-        close_mysqli($mysqli);
-        //Hier nun das Kommando von hex nach bin umwandeln
-        $comm_exec = hex2bin($res[0]["COMMANDO_AUS_ZEILE"]);
-        //Ausführen
-        exec($comm_exec);
+        //Vordefinierte Commandos herausfiltern
+        if($comm == "get_fb_dev"){
+            //Alle Geräte bekommen (Verarbeitung findet auch sofort statt)
+            $obj->def_all_hosts(null);
+            $obj->get_all(true);
+            $all_hosts = $obj->get_for_all_hosts();
+            $obj = null; 
+            //Verarbeitung
+            $proc = new proc_data($all_hosts);
+            $proc->proc_now();
+            $proc = null;
+            //Fertig
+            echo "ok";       
+        }else{
+            $sql = "[SQL_ZUR_COMMANDO_ABFRAGE]";
+            $mysqli = new_mysqli();
+            $res = sql_result_to_array(start_sql($mysqli,$sql));
+            close_mysqli($mysqli);
+            //Hier nun das Kommando von hex nach bin umwandeln
+            $comm_exec = hex2bin($res[0]["COMMANDO_AUS_ZEILE"]);
+            //Ausführen
+            exec($comm_exec);
+        }
     }else{
         //Nicht vertrauenswürdig
         echo "Not Allowed";

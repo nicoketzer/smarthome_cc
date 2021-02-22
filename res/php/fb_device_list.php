@@ -119,67 +119,51 @@ class proc_data{
         if(isset($this->hosts[0])){
             $this->test_for_double_hostnames();
             foreach($this->hosts as $fill_in){
-                
+                into_normal_db($fill_in);   
             }    
         }
     }
-    private function into_error_db($set){
+    private function into_error_db($hostname){
         //Erst testen ob schon Datensatz vorhanden ist
-            
+        $sql = "SELECT * FROM `router-dev-error` WHERE `hostname`='" . bin2hex($hostname) . "'";
+        $mysqli = new_mysqli();
+        $res = sql_result_to_array(start_sql($mysqli,$sql));
+        if(!isset($res[0])){
+            //Datensatz exisiteirt noch nicht
+            $cc_server = read_file("/res/data/cc_bind_token.txt");
+            $sql = "INSERT INTO `router-dev-error`(`cc_server`, `hostname`, `type`) VALUES ('" . $cc_server . "','" bin2hex($hostname) . "','1')";
+            start_sql($mysqli,$sql);
+        }
+        close_mysqli($mysqli);
+        return true;    
     }
     private function test_for_double_hostnames(){
         $tmp_array = array();
         foreach($this->hosts as $test){
-            if(!in_array($test,$tmp_array)){
-                array_push($tmp_array,$test);        
+            if(!in_array($test["hostname"],$tmp_array)){
+                array_push($tmp_array,$test["hostname"]);        
             }else{
                 //Dublicat erkannt
-                $this->into_error_db($test);
+                $this->into_error_db($test["hostname"]);
             }
         }
         $tmp_array = null;    
     }
     private function into_normal_db($set){
-        
+        //Erst testen ob schon Datensatz vorhanden ist
+        $sql = "SELECT * FROM `router-dev` WHERE `hostname`='" . bin2hex($set["hostname"]) . "'";
+        $mysqli = new_mysqli();
+        $res = sql_result_to_array(start_sql($mysqli,$sql));
+        if(!isset($res[0])){
+            //Datensatz exisiteirt noch nicht
+            $cc_server = read_file("/res/data/cc_bind_token.txt");
+            $hostname = $set["hostname"];
+            $state = $set["state"]
+            $sql = "INSERT INTO `router-dev`(`cc_server`, `hostname`, `state`, `last_update`) VALUES ('" . $cc_server . "','" . $hostname . "','" . $state . "','" . time() . "')";
+            start_sql($mysqli,$sql);
+        }
+        close_mysqli($mysqli);
+        return true;    
     }
 }
-//Test Starten
-//Neuse Obj
-$obj = new get_Wifi_state();
-//Funktion um Status eines gewissen Hostnames zu bekommen
-/*
-$obj->def_all_hosts(array("handy-nico"));
-//Funktion ob alle Hostnamen existieren
-$can_get_all = $obj->exist_all_hosts();
-//Alle definierten Hosts bekommen
-$state_for_hosts = $obj->get_for_all_hosts();
-*/
-//Keine Hosts definieren
-$obj->def_all_hosts(null);
-//Es sollen alle Hosts zurückgesendet werden
-$obj->get_all(true);
-//Alle Hosts bekommen
-$all_hosts = $obj->get_for_all_hosts();
-print_r($all_hosts);
-//Zurücksetzen
-$obj = null;
-//Alle Hosts verarbeiten und TBL updaten
-#Neuse Objekt
-//$proc_obj = new proc_data($all_hosts);
-//$proc_obj->proc_now();
-?> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+?>
