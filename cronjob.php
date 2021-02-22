@@ -1,5 +1,5 @@
 <?php
-include("res/all.php"); 
+include("./res/all.php"); 
 //Lokale Cronjob-Datei auf C&C-Server
 //Diese Cronjob-Datei wird verwendet für Sachen die mit Verzögerungen ab 
 //einer Minute klar kommen (z.B. Update Geräteliste)
