@@ -119,7 +119,7 @@ class proc_data{
         if(isset($this->hosts[0])){
             $this->test_for_double_hostnames();
             foreach($this->hosts as $fill_in){
-                into_normal_db($fill_in);   
+                $this->into_normal_db($fill_in);   
             }    
         }
     }
@@ -130,8 +130,9 @@ class proc_data{
         $res = sql_result_to_array(start_sql($mysqli,$sql));
         if(!isset($res[0])){
             //Datensatz exisiteirt noch nicht
-            $cc_server = read_file("/res/data/cc_bind_token.txt");
-            $sql = "INSERT INTO `router-dev-error`(`cc_server`, `hostname`, `type`) VALUES ('" . $cc_server . "','" bin2hex($hostname) . "','1')";
+            global $cc_server;
+            $cc_server = $cc_server_name;
+            $sql = "INSERT INTO `router-dev-error`(`cc_server`, `hostname`, `type`) VALUES ('" . $cc_server . "','" . bin2hex($hostname) . "','1')";
             start_sql($mysqli,$sql);
         }
         close_mysqli($mysqli);
@@ -150,16 +151,25 @@ class proc_data{
         $tmp_array = null;    
     }
     private function into_normal_db($set){
+        global $cc_server_name;
         //Erst testen ob schon Datensatz vorhanden ist
-        $sql = "SELECT * FROM `router-dev` WHERE `hostname`='" . bin2hex($set["hostname"]) . "'";
+        $sql = "SELECT * FROM `router-dev` WHERE `hostname`='" . bin2hex($set["hostname"]) . "' AND `cc_server`='" . bin2hex($cc_server_name) . "'";
         $mysqli = new_mysqli();
         $res = sql_result_to_array(start_sql($mysqli,$sql));
         if(!isset($res[0])){
             //Datensatz exisiteirt noch nicht
-            $cc_server = read_file("/res/data/cc_bind_token.txt");
+            global $cc_server_name;
+            $cc_server = $cc_server_name;
             $hostname = $set["hostname"];
-            $state = $set["state"]
-            $sql = "INSERT INTO `router-dev`(`cc_server`, `hostname`, `state`, `last_update`) VALUES ('" . $cc_server . "','" . $hostname . "','" . $state . "','" . time() . "')";
+            $state = $set["state"];
+            $sql = "INSERT INTO `router-dev`(`cc_server`, `hostname`, `state`, `last_update`) VALUES ('" . bin2hex($cc_server) . "','" . bin2hex($hostname) . "','" . $state . "','" . time() . "')";
+            start_sql($mysqli,$sql);
+        }else{
+            global $cc_server_name;
+            $cc_server = $cc_server_name;
+            $hostname = $set["hostname"];
+            $state = $set["state"];
+            $sql = "UPDATE `router-dev` SET `state`='" . $state . "', `last_update`='" . time() . "' WHERE `hostname`='" . bin2hex($hostname) . "' AND `cc_server`='" . bin2hex($cc_server) . "'";
             start_sql($mysqli,$sql);
         }
         close_mysqli($mysqli);
