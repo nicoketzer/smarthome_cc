@@ -29,11 +29,11 @@ if(!function_exists("sql_result_to_array")){
 //Neue Verbindung aufbauen mit Daten aus var.php
 if(!function_exists("new_mysqli")){
 function new_mysqli(){
-    global $db_bn;
-    global $db_pw;
-    global $db_tbl;
-    global $db_conn;
-    $mysqli = new mysqli($db_conn,$db_bn,$db_pw,$db_tbl);
+    global $mysqli_bn;
+    global $mysqli_pw;
+    global $mysqli_db;
+    global $mysqli_server;
+    $mysqli = new mysqli($mysqli_server,$mysqli_bn,$mysqli_pw,$mysqli_db);
     //echo mysqli_get_host_info($mysqli);
     if ($mysqli->connect_errno) {
         die("Verbindung fehlgeschlagen: " . $mysqli->connect_error);
