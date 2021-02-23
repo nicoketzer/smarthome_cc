@@ -15,4 +15,6 @@ $cc_cronjob_ident = "";
 $cc_ip_update_token = "";
 $cc_port_extern = "";
 $cc_server_addr = "";
+$cc_server_hostname = "";
+$cc_server_name = "";
 ?>
