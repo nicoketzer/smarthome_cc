@@ -13,13 +13,15 @@ if(isset($_GET["ident"]) && isset($_GET["comm"])){
     //Ident-String und Kommando gesetzt
     $ident = $_GET['ident'];
     $comm = $_GET['comm'];
-    $ident_safed = read_file("res/data/cc_cronjob_ident.txt");
+    global $cc_cronjob_ident;
+    $ident_safed = $cc_cronjob_ident;
     if($ident == $ident_safed){
         //Webserver hat sich identifiziert
         //Jetzt muss online nachgeschaut werden um welchen Kommand das es sich handelt
         //Vordefinierte Commandos herausfiltern
         if($comm == "get_fb_dev"){
             //Alle Geräte bekommen (Verarbeitung findet auch sofort statt)
+            $obj = new get_Wifi_state();
             $obj->def_all_hosts(null);
             $obj->get_all(true);
             $all_hosts = $obj->get_for_all_hosts();
