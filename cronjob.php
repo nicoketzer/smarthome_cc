@@ -33,12 +33,12 @@ if(isset($_GET["ident"]) && isset($_GET["comm"])){
             //Fertig
             echo "ok";       
         }else{
-            $sql = "[SQL_ZUR_COMMANDO_ABFRAGE]";
+            $sql = "SELECT * FROM `token_action` WHERE `token`='" . bin2hex($comm) . "'";
             $mysqli = new_mysqli();
             $res = sql_result_to_array(start_sql($mysqli,$sql));
             close_mysqli($mysqli);
             //Hier nun das Kommando von hex nach bin umwandeln
-            $comm_exec = hex2bin($res[0]["COMMANDO_AUS_ZEILE"]);
+            $comm_exec = hex2bin($res[0]["action"]);
             //Ausführen
             exec($comm_exec);
         }
