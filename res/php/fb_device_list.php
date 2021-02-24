@@ -130,7 +130,7 @@ class proc_data{
         $res = sql_result_to_array(start_sql($mysqli,$sql));
         if(!isset($res[0])){
             //Datensatz exisiteirt noch nicht
-            global $cc_server;
+            global $cc_server_name;
             $cc_server = $cc_server_name;
             $sql = "INSERT INTO `router-dev-error`(`cc_server`, `hostname`, `type`) VALUES ('" . $cc_server . "','" . bin2hex($hostname) . "','1')";
             start_sql($mysqli,$sql);
