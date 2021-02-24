@@ -40,7 +40,20 @@ if(isset($_GET["ident"]) && isset($_GET["comm"])){
             //Hier nun das Kommando von hex nach bin umwandeln
             $comm_exec = hex2bin($res[0]["action"]);
             //Ausführen
-            exec($comm_exec);
+            $comm_type = hex2bin($res[0]["action_type"]);
+            if($comm_type == "php_skript"){
+                exec($comm_exec);
+            }else if($comm_type == "http_req"){
+                //Sollte es sich um den Typ http_req handeln so ist der 
+                //Befehl in $comm_exec der URL der aufgerufen werden soll
+                $url = $comm_exec;
+                //Anfrage Starten
+                $erg = call_url($url);
+                //Rückgabe zurückgeben
+                echo $erg;    
+            }else{
+                echo "No Command Found";
+            }
         }
     }else{
         //Nicht vertrauenswürdig
