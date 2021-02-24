@@ -1,7 +1,10 @@
 <?php 
 //Alle Datein aus dem php-Verzeichnis einbinden die auf ".php" enden
 //Scannen
-$scan = scandir("./php");
+//Man befindet sich im Hauptverzeichnis also muss nochmal in den
+//"res" - Ordner gegangen werden
+//Späterer Fix über angabe von ABS-Path geplant
+$scan = scandir("res/php");
 $incl = array();
 //Herausfiltern
 foreach($scan as $test){
@@ -15,6 +18,6 @@ foreach($scan as $test){
 }
 //Einbinden 
 foreach($incl as $do){
-    include("./php/".$do);
+    include("res/php/".$do);
 }
 ?>
