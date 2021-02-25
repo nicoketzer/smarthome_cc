@@ -12,6 +12,7 @@ $mysqli_db = "";
 //gegeben ist
 $cc_bind_token = "";
 $cc_cronjob_ident = "";
+$cc_work_ident = "";
 $cc_ip_update_token = "";
 $cc_port_extern = "";
 $cc_server_addr = "";
