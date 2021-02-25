@@ -3,10 +3,16 @@
 //eingefügt werden
 
 //Variablen die Geändert werden dürfen
+#Zugansdaten Mysql-Server Remote
 $mysqli_server = "";
 $mysqli_bn = "";
 $mysqli_pw = "";
 $mysqli_db = "";
+
+#Zugangsdaten Mysql-Server lokal
+$local_mysql_bn = "";
+$local_mysql_pw = "";
+$local_mysql_db = "";
 
 //Variablen die nicht geändert werden dürfen da ggf. die Funktion sonst nicht mehr 
 //gegeben ist
