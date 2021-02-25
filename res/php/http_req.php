@@ -7,7 +7,7 @@ function call_url($url){
     $response_body = curl_exec($process);
     $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
     if($http_code >= 300) {
-      die("Unexpected Response Code: ${http_code}: ${response_body}");
+      return "Unexpected Response Code: ${http_code}: ${response_body}";
     }
     curl_close($process);
     return $response_body;
