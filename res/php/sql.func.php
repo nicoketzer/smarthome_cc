@@ -42,6 +42,21 @@ function new_mysqli(){
     }
 }
 }
+if(!function_exists("new_mysqli")){
+function new_offline_mysqli(){
+    global $mysqli_offline_bn;
+    global $mysqli_offline_pw;
+    global $mysqli_offline_db;
+    global $mysqli_offline_server;
+    $mysqli = new mysqli($mysqli_offline_server,$mysqli_offline_bn,$mysqli_offline_pw,$mysqli_offline_db);
+    //echo mysqli_get_host_info($mysqli);
+    if ($mysqli->connect_errno) {
+        die("Verbindung fehlgeschlagen: " . $mysqli->connect_error);
+    }else{
+        return $mysqli;
+    }
+}
+}
 //Verbindung schlieﬂen
 if(!function_exists("close_mysqli")){
 function close_mysqli($mysqli){

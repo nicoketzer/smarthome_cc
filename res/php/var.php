@@ -8,6 +8,11 @@ $mysqli_server = "";
 $mysqli_bn = "";
 $mysqli_pw = "";
 $mysqli_db = "";
+#Zugangsdaten Lokaler Mysql-Server
+$mysqli_offline_server = "";
+$mysqli_offline_bn = "";
+$mysqli_offline_pw = "";
+$mysqli_offline_db = "";
 
 #Zugangsdaten Mysql-Server lokal
 $local_mysql_bn = "";
